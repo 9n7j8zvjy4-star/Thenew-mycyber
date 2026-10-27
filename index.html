@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ركن أمان الأجهزة الذكية - لا تترك مجال</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Tajawal & IBM Plex Sans Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#050b10',
+                            panel: '#0a1622',
+                            tealDeep: '#0f3a42',
+                            tealMain: '#134e4a',
+                            accent: '#2dd4bf',
+                            cyan: '#38bdf8',
+                            iosCard: '#1c1c1e',
+                            danger: '#ef4444',
+                            warning: '#f59e0b',
+                            success: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'IBM Plex Sans Arabic', 'sans-serif'],
+                        mono: ['Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at top center, #0f3a42 0%, #050b10 80%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .matrix-terminal {
+            background-color: #03080d;
+            background-image: radial-gradient(#134e4a 0.6px, transparent 0.6px);
+            background-size: 10px 10px;
+        }
+
+        .ios-toggle {
+            appearance: none;
+            width: 44px;
+            height: 24px;
+            background: #3a3a3c;
+            border-radius: 12px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .ios-toggle:checked {
+            background: #30d158;
+        }
+        .ios-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .ios-toggle:checked::after {
+            transform: translateX(-20px);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2dd4bf;
+            border-radius: 4px;
+        }
+
+        .step-active {
+            border-color: #2dd4bf;
+            background-color: rgba(45, 212, 191, 0.15);
+            color: #2dd4bf;
+        }
+
+        /* iOS Push Notification Animation */
+        @keyframes slideDownNotification {
+            0% { transform: translateY(-120%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .animate-ios-notif {
+            animation: slideDownNotification 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen justify-between relative selection:bg-cyber-accent selection:text-black">
+
+    <!-- TOP HEADER BRANDING -->
+    <header class="w-full bg-black/70 backdrop-blur-md border-b border-cyber-accent/20 px-4 py-3 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyber-tealMain to-cyber-tealDeep border border-cyber-accent/40 flex items-center justify-center text-cyber-accent shadow-md">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xs md:text-sm text-cyber-accent font-bold">الإدارة العامة للتعليم بالمنطقة الشرقية</h1>
+                    <p class="text-[11px] text-gray-300">مدرسة الظهران الثانوية - مسارات</p>
+                </div>
+            </div>
+
+            <div class="text-left bg-cyber-tealDeep/80 border border-cyber-cyan/30 px-3.5 py-1.5 rounded-xl shadow-inner">
+                <span class="text-[10px] text-gray-300 block">الحدث التوعوي بالأمن السيبراني</span>
+                <span class="text-xs md:text-sm font-black text-cyber-cyan tracking-wider">ركن أمان الأجهزة الذكية - لا تترك مجال</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- STEP PROGRESS NAVIGATION BAR -->
+    <nav class="w-full bg-cyber-panel/80 border-b border-white/5 py-2 px-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center text-xs">
+            <div id="step-btn-1" class="step-active flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/10 font-bold transition">
+                <span class="w-5 h-5 rounded-full bg-cyber-accent text-black flex items-center justify-center text-[10px] font-black">1</span>
+                <span>المقدمة والتعريف</span>
+            </div>
+            <div class="h-0.5 bg-gray-700 flex-grow mx-2"></div>
+            <div id="step-btn-2" class="text-gray-400 flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/5 transition">
+                <span class="w-5 h-5 rounded-full bg-gray-700 text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                <span>المحاكي التفاعلي</span>
+            </div>
+            <div class="h-0.5 bg-gray-700 flex-grow mx-2"></div>
+            <div id="step-btn-3" class="text-gray-400 flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/5 transition">
+                <span class="w-5 h-5 rounded-full bg-gray-700 text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                <span>الاختبار الملخص</span>
+            </div>
+            <div class="h-0.5 bg-gray-700 flex-grow mx-2"></div>
+            <div id="step-btn-4" class="text-gray-400 flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/5 transition">
+                <span class="w-5 h-5 rounded-full bg-gray-700 text-white flex items-center justify-center text-[10px] font-bold">4</span>
+                <span>النصائح الختامية</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-grow flex flex-col justify-center items-center">
+
+        <!-- ========================================== -->
+        <!-- STAGE 1: INTRODUCTION & BOOTH OVERVIEW -->
+        <!-- ========================================== -->
+        <section id="stage-1" class="w-full max-w-3xl space-y-6 text-center">
+            
+            <div class="space-y-3">
+                <span class="bg-cyber-accent/10 border border-cyber-accent/40 text-cyber-accent text-xs font-bold px-4 py-1.5 rounded-full inline-block">
+                    مرحباً بكم في جناح التوعية بالأمن السيبراني
+                </span>
+                <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                    ركن أمان الأجهزة الذكية
+                </h1>
+                <p class="text-2xl md:text-3xl font-extrabold text-cyber-cyan tracking-widest uppercase">
+                    " لا تترك مجال "
+                </p>
+            </div>
+
+            <div class="bg-cyber-panel border border-cyber-accent/30 rounded-3xl p-6 shadow-2xl text-right space-y-4 relative overflow-hidden">
+                <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-cyber-accent/10 rounded-full blur-3xl"></div>
+                
+                <h2 class="text-lg font-bold text-cyber-accent border-b border-white/10 pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-virus"></i> هدف الركن والفعالية:
+                </h2>
+                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    نقدم تجربة تفاعلية حية تتيح للزائر رؤية ما يحدث خلف الكواليس عند اختراق الأجهزة الذكية عبر الشبكات العامة غير الآمنة. ستتعلم من خلال هذه المحاكاة أهمية **المصادقة الثنائية (2FA)** وضرورة اختيار **الشبكات المشفرة (WPA3)** وضبط **أذونات الخصوصية**.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                    <div class="bg-black/40 border border-white/5 rounded-xl p-3 text-center space-y-1">
+                        <i class="fa-solid fa-wifi text-cyber-cyan text-xl"></i>
+                        <h3 class="text-xs font-bold text-white">تجربة الشبكات Wi-Fi</h3>
+                        <p class="text-[11px] text-gray-400">مقارنة الشبكة العامة والشبكة المحمية WPA3</p>
+                    </div>
+                    <div class="bg-black/40 border border-white/5 rounded-xl p-3 text-center space-y-1">
+                        <i class="fa-solid fa-key text-cyber-accent text-xl"></i>
+                        <h3 class="text-xs font-bold text-white">المصادقة الثنائية 2FA</h3>
+                        <p class="text-[11px] text-gray-400">وصول إشعار الرمز OTP وتصدي الهكر</p>
+                    </div>
+                    <div class="bg-black/40 border border-white/5 rounded-xl p-3 text-center space-y-1">
+                        <i class="fa-solid fa-user-lock text-amber-400 text-xl"></i>
+                        <h3 class="text-xs font-bold text-white">لوحة البيانات المسحوبة</h3>
+                        <p class="text-[11px] text-gray-400">رؤية سحب وإخفاء البيانات في الوقت الفعلي</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="goToStage(2)" class="w-full sm:w-auto bg-gradient-to-r from-cyber-accent to-cyber-cyan hover:from-cyber-cyan hover:to-cyber-accent text-black font-extrabold text-base px-8 py-3.5 rounded-2xl shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3 mx-auto">
+                <span>ابدأ التجربة التفاعلية الآن</span>
+                <i class="fa-solid fa-play"></i>
+            </button>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STAGE 2: INTERACTIVE SIMULATOR (4 SUB-MODULES) -->
+        <!-- ========================================== -->
+        <section id="stage-2" class="w-full hidden space-y-5">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-start">
+                
+                <!-- HACKER PANEL: STOLEN DATA VAULT & TERMINAL (5 COLS) -->
+                <div class="lg:col-span-5 order-2 lg:order-1 space-y-4">
+                    
+                    <!-- STOLEN DATA VAULT PANEL -->
+                    <div class="matrix-terminal border border-red-500/40 rounded-2xl p-4 shadow-2xl relative overflow-hidden">
+                        <div class="flex items-center justify-between border-b border-red-500/30 pb-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                <span id="vault-live-dot" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+                                <span class="text-xs font-mono font-bold text-red-400 uppercase tracking-wider">STOLEN DATA VAULT | لوحة المخترق</span>
+                            </div>
+                            <span id="vault-status-badge" class="bg-red-500/20 text-red-400 border border-red-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">
+                                سحب نشط ⚠️
+                            </span>
+                        </div>
+
+                        <!-- Real-time Extracted Data Grid -->
+                        <div class="space-y-2 font-mono text-xs">
+                            
+                            <!-- Device Type -->
+                            <div class="bg-black/80 border border-white/10 rounded-lg p-2 flex justify-between items-center">
+                                <span class="text-gray-400 text-[11px]"><i class="fa-solid fa-mobile-screen ml-1"></i> نوع الجهاز:</span>
+                                <span id="vault-device" class="text-white font-bold text-[11px]">iPhone (iOS 17.4)</span>
+                            </div>
+
+                            <!-- IP Address -->
+                            <div class="bg-black/80 border border-white/10 rounded-lg p-2 flex justify-between items-center">
+                                <span class="text-gray-400 text-[11px]"><i class="fa-solid fa-network-wired ml-1"></i> عنوان IP:</span>
+                                <span id="vault-ip" class="text-red-400 font-bold text-[11px]">192.168.1.104</span>
+                            </div>
+
+                            <!-- Geolocation -->
+                            <div class="bg-black/80 border border-white/10 rounded-lg p-2 flex justify-between items-center">
+                                <span class="text-gray-400 text-[11px]"><i class="fa-solid fa-location-dot ml-1"></i> الموقع الجغرافي:</span>
+                                <span id="vault-location" class="text-amber-400 font-bold text-[11px]">الظهران، الشرقية</span>
+                            </div>
+
+                            <!-- Permissions status -->
+                            <div class="bg-black/80 border border-white/10 rounded-lg p-2 flex justify-between items-center">
+                                <span class="text-gray-400 text-[11px]"><i class="fa-solid fa-camera ml-1"></i> أذونات الكاميرا/الموقع:</span>
+                                <span id="vault-permissions" class="text-red-400 font-bold text-[11px]">مفتوحة وحسّاسة 🔴</span>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="bg-black/80 border border-white/10 rounded-lg p-2 flex justify-between items-center">
+                                <span class="text-gray-400 text-[11px]"><i class="fa-solid fa-envelope ml-1"></i> البريد الإلكتروني:</span>
+                                <span id="vault-email" class="text-gray-500 italic text-[11px]">بانتظار الإدخال...</span>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="bg-black/80 border border-white/10 rounded-lg p-2 flex justify-between items-center">
+                                <span class="text-gray-400 text-[11px]"><i class="fa-solid fa-key ml-1"></i> كلمة المرور:</span>
+                                <span id="vault-pass" class="text-gray-500 italic text-[11px]">بانتظار الإدخال...</span>
+                            </div>
+
+                        </div>
+
+                        <!-- Live Terminal Console Output -->
+                        <div class="mt-3 pt-2 border-t border-white/10">
+                            <span class="text-[10px] text-cyber-accent font-mono block mb-1">سجل العمليات الخفية (Terminal Log):</span>
+                            <div id="hacker-console" class="h-28 font-mono text-[10px] text-green-400 space-y-1 overflow-y-auto custom-scrollbar p-2 bg-black/90 rounded-lg border border-white/5">
+                                <p class="text-gray-500">// Sniffer initialized. Waiting for user actions...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUICK VISUAL GUIDE: SECURE VS UNSECURE WIFI -->
+                    <div class="bg-cyber-panel border border-cyber-accent/30 rounded-2xl p-3.5 text-xs space-y-2">
+                        <h3 class="font-bold text-cyber-accent text-xs flex items-center gap-1.5 border-b border-white/10 pb-1.5">
+                            <i class="fa-solid fa-book-open"></i> دليل سريع: كيف تفرق بين الشبكات بالواقع؟
+                        </h3>
+                        <div class="grid grid-cols-2 gap-2 text-[10px]">
+                            <div class="bg-red-950/40 border border-red-500/40 rounded-xl p-2 space-y-1">
+                                <span class="text-red-400 font-bold block"><i class="fa-solid fa-unlock ml-1"></i> غير آمنة 🔓</span>
+                                <p class="text-gray-300">بدون قفل بجانب الاسم، لا تتطلب كلمة سر، البيانات تمر مكشوفة بالكامل لشبكة التجسس.</p>
+                            </div>
+                            <div class="bg-emerald-950/40 border border-emerald-500/40 rounded-xl p-2 space-y-1">
+                                <span class="text-emerald-400 font-bold block"><i class="fa-solid fa-lock ml-1"></i> محمية 🔒</span>
+                                <p class="text-gray-300">تظهر رمز القفل وتستخدم تشفير WPA3/WPA2، تحوّل بياناتك لنصوص مشفرة لا يمكن قراءتها.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- IPHONE SIMULATOR (4 COLS) -->
+                <div class="lg:col-span-4 order-1 lg:order-2 flex justify-center">
+                    
+                    <div class="w-[310px] sm:w-[325px] h-[640px] bg-slate-900 border-[8px] border-slate-700/90 rounded-[50px] p-2 shadow-2xl relative border-t-[10px] border-b-[10px] flex flex-col justify-between overflow-hidden transition-all duration-300" id="iphone-frame">
+                        
+                        <!-- Dynamic Island -->
+                        <div class="w-28 h-5 bg-black rounded-full mx-auto absolute top-2 left-1/2 -translate-x-1/2 z-40 flex items-center justify-end px-2 gap-1.5 border border-white/5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                        </div>
+
+                        <!-- iOS Screen Content -->
+                        <div class="w-full h-full bg-black rounded-[40px] overflow-hidden flex flex-col text-white pt-7 relative font-sans">
+                            
+                            <!-- iOS Status Bar with Security Badge -->
+                            <div class="w-full px-3 py-1 flex justify-between items-center text-[10px] font-bold text-gray-200 z-30 border-b border-white/5">
+                                <span>10:54</span>
+                                
+                                <!-- TOP STATUS SECURITY BADGE -->
+                                <div id="top-left-status" class="bg-red-950/90 border border-red-500 text-red-400 px-2 py-0.5 rounded-full text-[9px] font-bold flex items-center gap-1 shadow-sm">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
+                                    <span>غير محمي 🔴</span>
+                                </div>
+
+                                <div class="flex items-center gap-1">
+                                    <i id="wifi-icon-bar" class="fa-solid fa-wifi text-gray-500 text-[10px]"></i>
+                                    <span class="text-[9px]">5G</span>
+                                </div>
+                            </div>
+
+                            <!-- REALTIME 2FA PUSH NOTIFICATION POPUP -->
+                            <div id="ios-2fa-notification" class="hidden absolute top-9 left-2 right-2 z-50 bg-slate-800/95 border border-cyber-accent/80 backdrop-blur-md text-white rounded-2xl p-2.5 shadow-2xl animate-ios-notif text-right">
+                                <div class="flex items-center justify-between border-b border-white/10 pb-1 mb-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="w-4 h-4 rounded bg-cyber-accent text-black flex items-center justify-center text-[8px] font-black">
+                                            <i class="fa-solid fa-shield-halved"></i>
+                                        </div>
+                                        <span class="text-[10px] font-bold text-cyber-accent">أمان الحسابات - OTP</span>
+                                    </div>
+                                    <span class="text-[8px] text-gray-400">الآن</span>
+                                </div>
+                                <p class="text-[10px] font-bold text-white">رمز التحقق لمنصة التعلم:</p>
+                                <div class="flex items-center justify-between my-1 bg-black/70 px-2.5 py-1 rounded-lg border border-cyber-accent/40">
+                                    <span class="text-[9px] text-gray-300">محاولة دخول من جهاز آخر</span>
+                                    <span id="notif-otp-code" class="text-sm font-mono font-black text-amber-400 tracking-widest">849201</span>
+                                </div>
+                                <p class="text-[8px] text-red-400 font-semibold">⚠️ تحذير: لا تشارك الرمز لمنع دخول المخترق!</p>
+                            </div>
+
+                            <!-- APP HUB / HOME / SCREENS -->
+                            <div class="flex-grow flex flex-col px-3 pt-2 pb-3 overflow-y-auto custom-scrollbar relative" id="ios-screen-area">
+                                
+                                <!-- APP HOME SCREEN (HUB) -->
+                                <div id="app-home" class="space-y-4">
+                                    <div class="text-right">
+                                        <h2 class="text-xs font-bold text-cyber-accent">الشاشة الرئيسية للجوّال</h2>
+                                        <p class="text-[9px] text-gray-400">اختر تطبيقاً لتجربة سيناريوهات الأمان</p>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-3 pt-2">
+                                        <!-- APP 1: SETTINGS & WIFI -->
+                                        <button onclick="openApp('settings')" class="flex flex-col items-center gap-1 group">
+                                            <div class="w-13 h-13 bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl flex items-center justify-center text-white text-xl border border-gray-600 group-hover:scale-105 transition shadow">
+                                                <i class="fa-solid fa-gear"></i>
+                                            </div>
+                                            <span class="text-[10px] text-gray-200 font-bold">الإعدادات والشبكة</span>
+                                        </button>
+
+                                        <!-- APP 2: LOGIN PORTAL -->
+                                        <button onclick="openApp('login')" class="flex flex-col items-center gap-1 group">
+                                            <div class="w-13 h-13 bg-gradient-to-br from-indigo-600 to-indigo-900 rounded-2xl flex items-center justify-center text-white text-xl border border-indigo-400 group-hover:scale-105 transition shadow">
+                                                <i class="fa-solid fa-graduation-cap"></i>
+                                            </div>
+                                            <span class="text-[10px] text-gray-200 font-bold">منصة التعلم</span>
+                                        </button>
+
+                                        <!-- APP 3: PRIVACY & PERMISSIONS -->
+                                        <button onclick="openApp('privacy')" class="flex flex-col items-center gap-1 group">
+                                            <div class="w-13 h-13 bg-gradient-to-br from-emerald-600 to-emerald-900 rounded-2xl flex items-center justify-center text-white text-xl border border-emerald-400 group-hover:scale-105 transition shadow">
+                                                <i class="fa-solid fa-user-shield"></i>
+                                            </div>
+                                            <span class="text-[10px] text-gray-200 font-bold">الخصوصية</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="bg-cyber-tealDeep/60 border border-cyber-accent/30 p-2.5 rounded-xl text-[10px] text-gray-200 space-y-1 mt-4">
+                                        <p class="font-bold text-cyber-accent"><i class="fa-solid fa-lightbulb ml-1"></i> خطوات الجولة التفاعلية:</p>
+                                        <ol class="list-decimal list-inside text-gray-300 space-y-1 text-[9.5px]">
+                                            <li>افتح <strong>الإعدادات</strong> واختر بين شبكة مجانية أو محمية.</li>
+                                            <li>افتح <strong>الخصوصية</strong> وفعّل/عطّل أذونات الكاميرا والموقع.</li>
+                                            <li>سجّل دخولك في <strong>منصة التعلم</strong> لتجربة المصادقة 2FA.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <!-- APP 1: SETTINGS SCREEN (WIFI SELECTION & 2FA TOGGLE) -->
+                                <div id="app-settings" class="hidden space-y-3">
+                                    <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+                                        <button onclick="openHome()" class="text-[10px] text-cyber-accent font-bold flex items-center gap-1">
+                                            <i class="fa-solid fa-chevron-right"></i> الرئيسية
+                                        </button>
+                                        <span class="text-xs font-bold text-white">إعدادات Wi-Fi والأمان</span>
+                                        <span class="w-8"></span>
+                                    </div>
+
+                                    <!-- WIFI SELECTION BOX -->
+                                    <div class="bg-cyber-iosCard rounded-xl p-2.5 space-y-2 border border-white/5">
+                                        <span class="text-[10px] text-gray-400 font-bold block">اختر شبكة الواي فاي (Wi-Fi):</span>
+                                        
+                                        <!-- UNSECURE WIFI OPTION -->
+                                        <button onclick="selectWifiNetwork('unsecure')" class="w-full bg-red-950/40 hover:bg-red-900/50 border border-red-500/50 rounded-xl p-2 text-right flex items-center justify-between transition">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-unlock text-red-400 text-sm"></i>
+                                                <div>
+                                                    <span class="text-[11px] font-bold text-white block">Free_Public_WiFi</span>
+                                                    <span class="text-[9px] text-red-400 font-semibold">عامة غير محمية 🔓 (بدون تشفير)</span>
+                                                </div>
+                                            </div>
+                                            <span id="wifi-unsecure-btn" class="text-[9px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded font-bold">اتصال</span>
+                                        </button>
+
+                                        <!-- SECURE WIFI OPTION -->
+                                        <button onclick="selectWifiNetwork('secure')" class="w-full bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/50 rounded-xl p-2 text-right flex items-center justify-between transition">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-lock text-emerald-400 text-sm"></i>
+                                                <div>
+                                                    <span class="text-[11px] font-bold text-white block">Dhahran_School_Secure</span>
+                                                    <span class="text-[9px] text-emerald-400 font-semibold">محمية آمنة 🔒 (تشفير WPA3)</span>
+                                                </div>
+                                            </div>
+                                            <span id="wifi-secure-btn" class="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-bold">اتصال</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- 2FA TOGGLE OPTION -->
+                                    <div class="bg-cyber-iosCard rounded-xl p-2.5 border border-white/5 flex items-center justify-between">
+                                        <div>
+                                            <span class="text-[10px] text-white font-bold block">المصادقة الثنائية (2FA)</span>
+                                            <span class="text-[9px] text-gray-400">رمز تحقق OTP إضافي للجوّال</span>
+                                        </div>
+                                        <input type="checkbox" id="toggle-2fa" class="ios-toggle" onchange="toggle2FASetting()">
+                                    </div>
+                                </div>
+
+                                <!-- APP 2: LOGIN PORTAL SCREEN -->
+                                <div id="app-login" class="hidden space-y-3">
+                                    <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+                                        <button onclick="openHome()" class="text-[10px] text-cyber-accent font-bold flex items-center gap-1">
+                                            <i class="fa-solid fa-chevron-right"></i> الرئيسية
+                                        </button>
+                                        <span class="text-xs font-bold text-indigo-400">منصة التعلم</span>
+                                        <span class="w-8"></span>
+                                    </div>
+
+                                    <div class="bg-cyber-iosCard rounded-xl p-2.5 space-y-2 border border-white/5 text-xs">
+                                        <div class="space-y-1">
+                                            <label class="text-[10px] text-gray-400">البريد الإلكتروني:</label>
+                                            <input type="text" id="input-email" oninput="liveUpdateCredentials()" placeholder="student@edu.sa" class="w-full bg-black/60 border border-gray-700 rounded-lg p-1.5 text-[10px] text-white">
+                                        </div>
+
+                                        <div class="space-y-1">
+                                            <label class="text-[10px] text-gray-400">كلمة المرور:</label>
+                                            <input type="password" id="input-pass" oninput="liveUpdateCredentials()" placeholder="••••••••••••" class="w-full bg-black/60 border border-gray-700 rounded-lg p-1.5 text-[10px] text-white">
+                                        </div>
+
+                                        <button onclick="autoFillCredentials()" class="w-full bg-slate-800 hover:bg-slate-700 border border-cyber-accent/40 text-cyber-accent font-bold py-1.5 rounded-lg text-[10px] transition flex items-center justify-center gap-1">
+                                            <i class="fa-solid fa-wand-magic-sparkles"></i> تعبئة تجريبية تلقائية
+                                        </button>
+                                    </div>
+
+                                    <button onclick="submitLoginAttempt()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-2 rounded-xl text-xs transition shadow">
+                                        تجربة تسجيل الدخول <i class="fa-solid fa-arrow-left mr-1"></i>
+                                    </button>
+
+                                    <!-- RESULT NOTIFICATION IN PHONE -->
+                                    <div id="login-result-card" class="hidden p-2.5 rounded-xl border text-[10px] leading-relaxed text-right space-y-1">
+                                        <!-- Dynamic JS Content -->
+                                    </div>
+                                </div>
+
+                                <!-- APP 3: PRIVACY & PERMISSIONS -->
+                                <div id="app-privacy" class="hidden space-y-3">
+                                    <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+                                        <button onclick="openHome()" class="text-[10px] text-cyber-accent font-bold flex items-center gap-1">
+                                            <i class="fa-solid fa-chevron-right"></i> الرئيسية
+                                        </button>
+                                        <span class="text-xs font-bold text-emerald-400">إعدادات الخصوصية</span>
+                                        <span class="w-8"></span>
+                                    </div>
+
+                                    <!-- PRIVACY TOGGLE EXPERIMENT -->
+                                    <div class="bg-cyber-iosCard rounded-xl p-2.5 space-y-2 border border-white/5">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <span class="text-[10px] text-white font-bold block">حماية أذونات الموقع والكاميرا</span>
+                                                <span class="text-[9px] text-gray-400">تقييد وصول التطبيقات غير الموثوقة</span>
+                                            </div>
+                                            <input type="checkbox" id="toggle-privacy" class="ios-toggle" onchange="togglePrivacySetting()">
+                                        </div>
+                                    </div>
+
+                                    <!-- PRIVACY EXPERIMENT RESULT BOX -->
+                                    <div id="privacy-result-card" class="bg-red-950/80 border border-red-500 text-red-200 p-2.5 rounded-xl text-[10px] space-y-1 text-right">
+                                        <span class="font-bold text-red-400 block"><i class="fa-solid fa-triangle-exclamation"></i> الأذونات معطلة وغير محمية 🔴</span>
+                                        <p>تم تسريب **موقعك الجغرافي (الظهران)** وأذونات الوسائط مباشرة إلى لوحة البيانات المسحوبة لدى المخترق!</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- iOS Bottom Home Bar -->
+                            <button onclick="openHome()" class="w-28 h-1 bg-gray-400/60 hover:bg-white rounded-full mx-auto my-1.5 transition"></button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CONTROL & OVERALL STATUS SUMMARY (3 COLS) -->
+                <div class="lg:col-span-3 order-3 space-y-4">
+                    <div class="bg-cyber-panel border border-cyber-accent/30 rounded-2xl p-4 shadow-xl space-y-3">
+                        <h2 class="text-xs font-bold text-cyber-accent border-b border-white/10 pb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved"></i> تقرير حالة الحماية الحالية
+                        </h2>
+
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-black/50 p-2.5 rounded-xl border border-white/5 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300 text-[11px]">حالة الواي فاي:</span>
+                                    <span id="label-wifi-state" class="text-amber-400 font-bold text-[10px]">غير متصل ❌</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300 text-[11px]">المصادقة 2FA:</span>
+                                    <span id="label-2fa-state" class="text-red-400 font-bold text-[10px]">غير مفعلة ❌</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300 text-[11px]">الخصوصية والأذونات:</span>
+                                    <span id="label-privacy-state" class="text-red-400 font-bold text-[10px]">مفتوحة (مكشوفة) ❌</span>
+                                </div>
+                                <div class="pt-2 border-t border-white/10 flex justify-between items-center">
+                                    <span class="text-white font-bold text-[11px]">مستوى الأمان:</span>
+                                    <span id="label-overall-state" class="text-red-400 font-bold text-[10px]">معرض للاختراق 🔴</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="next-to-stage3-btn" onclick="goToStage(3)" class="w-full bg-gradient-to-r from-cyber-accent to-cyber-cyan text-black font-extrabold py-2.5 rounded-xl text-xs transition shadow hover:scale-105 flex items-center justify-center gap-2 cursor-pointer">
+                            <span>الانتقال للاختبار الملخص</span>
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STAGE 3: SUMMARY QUIZ (3 QUESTIONS WITH LOCKED OPTIONS) -->
+        <!-- ========================================== -->
+        <section id="stage-3" class="w-full max-w-2xl hidden space-y-6">
+            <div class="text-center space-y-2">
+                <span class="bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-xs font-bold px-3 py-1 rounded-full">
+                    المرحلة الثالثة: تقييم الوعي
+                </span>
+                <h2 class="text-2xl md:text-3xl font-black text-white">اختبر معلوماتك السيبرانية</h2>
+                <p class="text-xs text-gray-300">أجب على الأسئلة الثلاثة التالية (يتم تثبيت وتجميد خيارك فوراً)</p>
+            </div>
+
+            <div class="bg-cyber-panel border border-cyber-accent/30 rounded-3xl p-6 shadow-2xl space-y-6">
+                
+                <!-- QUESTION 1 -->
+                <div class="space-y-2 border-b border-white/10 pb-4" id="quiz-container-1">
+                    <p class="text-sm font-bold text-cyber-accent">1. ماذا يحدث عند الاتصال بشبكة Wi-Fi عامة غير محمية (Free_Public_WiFi)؟</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <button id="q1-opt-a" onclick="answerQuiz(1, false, 'q1-opt-a')" class="q-opt-1 bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between">
+                            <span>أ) يتم تشفير جميع بياناتك تلقائياً وبأمان تام.</span>
+                            <span class="status-icon"></span>
+                        </button>
+                        <button id="q1-opt-b" onclick="answerQuiz(1, true, 'q1-opt-b')" class="q-opt-1 bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between">
+                            <span>ب) تكون البيانات مكشوفة ويمكن للمخترق سحبها في لوحة البيانات.</span>
+                            <span class="status-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QUESTION 2 -->
+                <div class="space-y-2 border-b border-white/10 pb-4" id="quiz-container-2">
+                    <p class="text-sm font-bold text-cyber-accent">2. كيف منعت المصادقة الثنائية (2FA) دخول المخترق للحساب؟</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <button id="q2-opt-a" onclick="answerQuiz(2, true, 'q2-opt-a')" class="q-opt-2 bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between">
+                            <span>أ) أرسلت رمز OTP للجوال ووقفت عائقاً حجب دخوله بدون الرمز.</span>
+                            <span class="status-icon"></span>
+                        </button>
+                        <button id="q2-opt-b" onclick="answerQuiz(2, false, 'q2-opt-b')" class="q-opt-2 bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between">
+                            <span>ب) قامت بحظر الاتصال بالإنترنت بشكل كامل فوراً.</span>
+                            <span class="status-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QUESTION 3 -->
+                <div class="space-y-2" id="quiz-container-3">
+                    <p class="text-sm font-bold text-cyber-accent">3. ما الإجراء الصحيح لحماية الموقع والكاميرا من التسريب؟</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <button id="q3-opt-a" onclick="answerQuiz(3, false, 'q3-opt-a')" class="q-opt-3 bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between">
+                            <span>أ) إعطاء جميع الأذونات لكافة التطبيقات بدون تردّد.</span>
+                            <span class="status-icon"></span>
+                        </button>
+                        <button id="q3-opt-b" onclick="answerQuiz(3, true, 'q3-opt-b')" class="q-opt-3 bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between">
+                            <span>ب) تقييد وإغلاق أذونات الخصوصية للتطبيقات غير الموثوقة.</span>
+                            <span class="status-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QUIZ RESULT & NEXT BUTTON -->
+                <div id="quiz-result-box" class="hidden bg-cyber-tealDeep/80 border border-cyber-accent p-4 rounded-2xl text-center space-y-2">
+                    <h3 id="quiz-score-text" class="text-base font-extrabold text-cyber-accent"></h3>
+                    <button onclick="goToStage(4)" class="bg-gradient-to-r from-cyber-accent to-cyber-cyan text-black font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow hover:scale-105">
+                        الانتقال للنصائح الختامية ➔
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- STAGE 4: EDUCATIONAL CARDS & FINAL TIPS -->
+        <!-- ========================================== -->
+        <section id="stage-4" class="w-full max-w-3xl hidden space-y-6 text-center">
+            
+            <div class="space-y-2">
+                <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full">
+                    المرحلة الرابعة: الوصايا السيبرانية
+                </span>
+                <h2 class="text-2xl md:text-4xl font-black text-white">3 نصائح ذهبية لحماية جهازك الذكي</h2>
+                <p class="text-xs text-gray-300">التزم بهذه القواعد لحماية حساباتك وبياناتك الشخصية من التجسس</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-right">
+                
+                <!-- TIP 1 -->
+                <div class="bg-cyber-panel border border-cyber-accent/40 rounded-2xl p-5 space-y-3 shadow-xl relative overflow-hidden group hover:border-cyber-accent transition">
+                    <div class="w-12 h-12 rounded-2xl bg-cyber-tealDeep border border-cyber-accent/50 flex items-center justify-center text-cyber-accent text-2xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">1. فعّل المصادقة الثنائية (2FA)</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        اجعل رمز التحقق OTP خط دفاعك الأول؛ يمنع الاختراق حتى لو تسربت كلمة السر في الشبكات العامة!
+                    </p>
+                </div>
+
+                <!-- TIP 2 -->
+                <div class="bg-cyber-panel border border-cyber-cyan/40 rounded-2xl p-5 space-y-3 shadow-xl relative overflow-hidden group hover:border-cyber-cyan transition">
+                    <div class="w-12 h-12 rounded-2xl bg-cyber-tealDeep border border-cyber-cyan/50 flex items-center justify-center text-cyber-cyan text-2xl">
+                        <i class="fa-solid fa-wifi"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">2. اتصل بشبكات مشفرة (WPA3)</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        تجنب إدخال البيانات الحساسة أو الحسابات البنكية على شبكات Wi-Fi مفتوحة بدون كلمة سر وقفل أمان.
+                    </p>
+                </div>
+
+                <!-- TIP 3 -->
+                <div class="bg-cyber-panel border border-amber-500/40 rounded-2xl p-5 space-y-3 shadow-xl relative overflow-hidden group hover:border-amber-400 transition">
+                    <div class="w-12 h-12 rounded-2xl bg-cyber-tealDeep border border-amber-500/50 flex items-center justify-center text-amber-400 text-2xl">
+                        <i class="fa-solid fa-user-lock"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">3. راجع أذونات الكاميرا والموقع</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        لا تمنح صلاحيات الموقع الجغرافي والكاميرا إلا للتطبيق الموثوق الذي يحتاجه فعلياً لتقليل مخاطر التسريب.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="pt-4">
+                <button onclick="goToStage(1); resetSimulator();" class="bg-gradient-to-r from-cyber-tealMain to-cyber-tealDeep hover:from-cyber-tealDeep hover:to-cyber-tealMain border border-cyber-accent text-cyber-accent font-bold px-8 py-3 rounded-2xl text-xs transition shadow transform hover:scale-105">
+                    <i class="fa-solid fa-rotate-right ml-2"></i> إعادة التجربة للزائر القادم
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER BRANDING -->
+    <footer class="w-full text-center py-3 border-t border-white/10 text-[11px] text-gray-400 bg-black/70">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>ركن أمان الأجهزة الذكية - لا تترك مجال &copy; 2026</span>
+            <span class="text-cyber-accent font-semibold">الإدارة العامة للتعليم بالمنطقة الشرقية - مدرسة الظهران الثانوية</span>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT SIMULATOR ENGINE -->
+    <script>
+        let currentWifiMode = 'none'; // 'none', 'unsecure', 'secure'
+        let is2FAEnabled = false;
+        let isPrivacyProtected = false;
+        let quizAnswers = { 1: null, 2: null, 3: null };
+
+        // QUIZ CORRECT ANSWERS MAPPING
+        const correctQuizKeys = {
+            1: 'q1-opt-b',
+            2: 'q2-opt-a',
+            3: 'q3-opt-b'
+        };
+
+        function goToStage(stageNum) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`stage-${i}`).classList.add('hidden');
+                const btn = document.getElementById(`step-btn-${i}`);
+                btn.className = "text-gray-400 flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/5 transition";
+                btn.querySelector('span:first-child').className = "w-5 h-5 rounded-full bg-gray-700 text-white flex items-center justify-center text-[10px] font-bold";
+            }
+
+            document.getElementById(`stage-${stageNum}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`step-btn-${stageNum}`);
+            activeBtn.className = "step-active flex items-center gap-1.5 px-3 py-1 rounded-full border border-white/10 font-bold transition";
+            activeBtn.querySelector('span:first-child').className = "w-5 h-5 rounded-full bg-cyber-accent text-black flex items-center justify-center text-[10px] font-black";
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openApp(appName) {
+            document.getElementById('app-home').classList.add('hidden');
+            document.getElementById('app-settings').classList.add('hidden');
+            document.getElementById('app-login').classList.add('hidden');
+            document.getElementById('app-privacy').classList.add('hidden');
+
+            document.getElementById(`app-${appName}`).classList.remove('hidden');
+
+            if (appName === 'settings') {
+                logHackerTerminal('[NAV] Target opened Settings & Wi-Fi configuration.', 'normal');
+            } else if (appName === 'login') {
+                logHackerTerminal('[NAV] Target opened Learning Platform login form.', 'normal');
+            } else if (appName === 'privacy') {
+                logHackerTerminal('[NAV] Target opened Privacy & Permissions.', 'normal');
+            }
+        }
+
+        function openHome() {
+            document.getElementById('app-home').classList.remove('hidden');
+            document.getElementById('app-settings').classList.add('hidden');
+            document.getElementById('app-login').classList.add('hidden');
+            document.getElementById('app-privacy').classList.add('hidden');
+        }
+
+        function selectWifiNetwork(type) {
+            currentWifiMode = type;
+            const unsecureBtn = document.getElementById('wifi-unsecure-btn');
+            const secureBtn = document.getElementById('wifi-secure-btn');
+            const wifiIcon = document.getElementById('wifi-icon-bar');
+            const wifiStateLabel = document.getElementById('label-wifi-state');
+
+            if (type === 'unsecure') {
+                unsecureBtn.innerText = 'متصل ✔️';
+                unsecureBtn.className = 'text-[9px] bg-red-500 text-white px-2 py-0.5 rounded font-bold';
+                
+                secureBtn.innerText = 'اتصال';
+                secureBtn.className = 'text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-bold';
+
+                wifiIcon.className = 'fa-solid fa-unlock text-red-400 text-[10px]';
+                wifiStateLabel.innerText = 'عامة غير محمية 🔓';
+                wifiStateLabel.className = 'text-red-400 font-bold text-[10px]';
+
+                logHackerTerminal('[ALERT] Target joined UNSECURE Wi-Fi (Free_Public_WiFi)!', 'danger');
+                logHackerTerminal('[SNIFF] Sniffing unencrypted packets...', 'warning');
+
+                updateStolenVault();
+            } else if (type === 'secure') {
+                secureBtn.innerText = 'متصل ✔️';
+                secureBtn.className = 'text-[9px] bg-emerald-500 text-black px-2 py-0.5 rounded font-bold';
+
+                unsecureBtn.innerText = 'اتصال';
+                unsecureBtn.className = 'text-[9px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded font-bold';
+
+                wifiIcon.className = 'fa-solid fa-lock text-emerald-400 text-[10px]';
+                wifiStateLabel.innerText = 'محمية WPA3 🔒';
+                wifiStateLabel.className = 'text-emerald-400 font-bold text-[10px]';
+
+                logHackerTerminal('[PROTECTED] Joined Secure Network (Dhahran_School_Secure).', 'success');
+                logHackerTerminal('[ENCRYPTED] WPA3 cipher active. Data packets encrypted!', 'success');
+
+                updateStolenVault();
+            }
+            updateOverallSecurityState();
+        }
+
+        function toggle2FASetting() {
+            is2FAEnabled = document.getElementById('toggle-2fa').checked;
+            const stateLabel = document.getElementById('label-2fa-state');
+
+            if (is2FAEnabled) {
+                stateLabel.innerText = 'مفعلة (آمنة) 🔒';
+                stateLabel.className = 'text-emerald-400 font-bold text-[10px]';
+                logHackerTerminal('[SECURITY] 2FA Activated by user.', 'success');
+            } else {
+                stateLabel.innerText = 'غير مفعلة ❌';
+                stateLabel.className = 'text-red-400 font-bold text-[10px]';
+                logHackerTerminal('[WARN] 2FA Disabled! High risk of credentials reuse.', 'danger');
+            }
+            updateStolenVault();
+            updateOverallSecurityState();
+        }
+
+        function togglePrivacySetting() {
+            isPrivacyProtected = document.getElementById('toggle-privacy').checked;
+            const resCard = document.getElementById('privacy-result-card');
+            const stateLabel = document.getElementById('label-privacy-state');
+
+            if (isPrivacyProtected) {
+                stateLabel.innerText = 'محمية (مقيدة) 🔒';
+                stateLabel.className = 'text-emerald-400 font-bold text-[10px]';
+
+                resCard.className = 'bg-emerald-950/80 border border-emerald-500 text-emerald-200 p-2.5 rounded-xl text-[10px] space-y-1 text-right';
+                resCard.innerHTML = `
+                    <span class="font-bold text-emerald-400 block"><i class="fa-solid fa-shield-check"></i> الأذونات مقيدة وآمنة 🟢</span>
+                    <p>تم حجب تسريب الموقع الجغرافي والكاميرا بنجاح ومنع وصول المخترق لها.</p>
+                `;
+
+                logHackerTerminal('[BLOCKED] Geolocation and camera access DENIED by user.', 'success');
+            } else {
+                stateLabel.innerText = 'مفتوحة (مكشوفة) ❌';
+                stateLabel.className = 'text-red-400 font-bold text-[10px]';
+
+                resCard.className = 'bg-red-950/80 border border-red-500 text-red-200 p-2.5 rounded-xl text-[10px] space-y-1 text-right';
+                resCard.innerHTML = `
+                    <span class="font-bold text-red-400 block"><i class="fa-solid fa-triangle-exclamation"></i> الأذونات معطلة وغير محمية 🔴</span>
+                    <p>تم تسريب **موقعك الجغرافي (الظهران)** وأذونات الوسائط مباشرة إلى لوحة البيانات المسحوبة لدى المخترق!</p>
+                `;
+
+                logHackerTerminal('[LEAK] Captured location GPS: Dhahran, KSA', 'danger');
+            }
+            updateStolenVault();
+            updateOverallSecurityState();
+        }
+
+        function liveUpdateCredentials() {
+            if (currentWifiMode === 'unsecure') {
+                updateStolenVault();
+            }
+        }
+
+        function autoFillCredentials() {
+            document.getElementById('input-email').value = 'student.dammam@edu.sa';
+            document.getElementById('input-pass').value = 'Cyber2026!Pass';
+            updateStolenVault();
+        }
+
+        function updateStolenVault() {
+            const vaultDot = document.getElementById('vault-live-dot');
+            const vaultBadge = document.getElementById('vault-status-badge');
+            
+            const elDevice = document.getElementById('vault-device');
+            const elIp = document.getElementById('vault-ip');
+            const elLoc = document.getElementById('vault-location');
+            const elPerm = document.getElementById('vault-permissions');
+            const elEmail = document.getElementById('vault-email');
+            const elPass = document.getElementById('vault-pass');
+
+            const typedEmail = document.getElementById('input-email').value || 'student@edu.sa';
+            const typedPass = document.getElementById('input-pass').value || '••••••••';
+
+            // IF CONNECTED TO SECURE WIFI OR FULLY PROTECTED
+            if (currentWifiMode === 'secure') {
+                vaultDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+                vaultBadge.className = 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full';
+                vaultBadge.innerText = 'محمي ومشفّر 🛡️';
+
+                elDevice.innerText = '[محمي ومشفّر 🛡️]'; elDevice.className = 'text-emerald-400 font-bold text-[11px]';
+                elIp.innerText = '0x8F9A... [Ciphertext]'; elIp.className = 'text-gray-500 font-bold text-[11px]';
+                elLoc.innerText = '[محجوب ومشفر]'; elLoc.className = 'text-gray-500 font-bold text-[11px]';
+                elPerm.innerText = 'مقيدة ومحمية 🔒'; elPerm.className = 'text-emerald-400 font-bold text-[11px]';
+                elEmail.innerText = '••••••••@encrypted'; elEmail.className = 'text-gray-500 font-bold text-[11px]';
+                elPass.innerText = '••••••••••••'; elPass.className = 'text-gray-500 font-bold text-[11px]';
+                return;
+            }
+
+            // IF UNSECURE WIFI
+            if (currentWifiMode === 'unsecure') {
+                vaultDot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 animate-ping';
+                vaultBadge.className = 'bg-red-500/20 text-red-400 border border-red-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full';
+                vaultBadge.innerText = 'سحب بيانات نشط ⚠️';
+
+                elDevice.innerText = 'iPhone (iOS 17.4)'; elDevice.className = 'text-white font-bold text-[11px]';
+                elIp.innerText = '192.168.1.104'; elIp.className = 'text-red-400 font-bold text-[11px]';
+                
+                if (isPrivacyProtected) {
+                    elLoc.innerText = '[محجوب ومحمي 🔒]'; elLoc.className = 'text-emerald-400 font-bold text-[11px]';
+                    elPerm.innerText = 'محمية ومقيدة 🔒'; elPerm.className = 'text-emerald-400 font-bold text-[11px]';
+                } else {
+                    elLoc.innerText = 'الظهران، الشرقية'; elLoc.className = 'text-amber-400 font-bold text-[11px]';
+                    elPerm.innerText = 'مكشوفة للتجسس 🔴'; elPerm.className = 'text-red-400 font-bold text-[11px]';
+                }
+
+                elEmail.innerText = typedEmail; elEmail.className = 'text-red-400 font-bold text-[11px]';
+                elPass.innerText = typedPass; elPass.className = 'text-red-400 font-bold text-[11px]';
+            } else {
+                // NOT CONNECTED YET
+                elDevice.innerText = 'غير متصل'; elDevice.className = 'text-gray-500 text-[11px]';
+                elIp.innerText = '---.---.---.---'; elIp.className = 'text-gray-500 text-[11px]';
+                elLoc.innerText = 'غير محدد'; elLoc.className = 'text-gray-500 text-[11px]';
+                elPerm.innerText = 'بانتظار الاختيار'; elPerm.className = 'text-gray-500 text-[11px]';
+                elEmail.innerText = 'بانتظار الإدخال...'; elEmail.className = 'text-gray-500 text-[11px]';
+                elPass.innerText = 'بانتظار الإدخال...'; elPass.className = 'text-gray-500 text-[11px]';
+            }
+        }
+
+        function updateOverallSecurityState() {
+            const badgeTop = document.getElementById('top-left-status');
+            const generalLabel = document.getElementById('label-overall-state');
+
+            if (currentWifiMode === 'secure' && is2FAEnabled && isPrivacyProtected) {
+                badgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>محمي بالكامل 🟢</span>';
+                badgeTop.className = 'bg-emerald-950/90 border border-emerald-500 text-emerald-400 px-2 py-0.5 rounded-full text-[9px] font-bold flex items-center gap-1 shadow-sm';
+                
+                generalLabel.innerText = 'محمي بالكامل 🟢';
+                generalLabel.className = 'text-emerald-400 font-bold text-[10px]';
+            } else if (currentWifiMode === 'secure' || is2FAEnabled) {
+                badgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span><span>حماية جزئية 🟡</span>';
+                badgeTop.className = 'bg-amber-950/90 border border-amber-500 text-amber-400 px-2 py-0.5 rounded-full text-[9px] font-bold flex items-center gap-1 shadow-sm';
+                
+                generalLabel.innerText = 'حماية جزئية 🟡';
+                generalLabel.className = 'text-amber-400 font-bold text-[10px]';
+            } else {
+                badgeTop.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span><span>غير محمي 🔴</span>';
+                badgeTop.className = 'bg-red-950/90 border border-red-500 text-red-400 px-2 py-0.5 rounded-full text-[9px] font-bold flex items-center gap-1 shadow-sm';
+                
+                generalLabel.innerText = 'معرض للاختراق 🔴';
+                generalLabel.className = 'text-red-400 font-bold text-[10px]';
+            }
+        }
+
+        function submitLoginAttempt() {
+            const email = document.getElementById('input-email').value || 'student@edu.sa';
+            const resCard = document.getElementById('login-result-card');
+            const notifBox = document.getElementById('ios-2fa-notification');
+
+            if (currentWifiMode === 'none') {
+                alert('يرجى اختيار شبكة الواي فاي من الإعدادات قبل تجربة الدخول!');
+                return;
+            }
+
+            logHackerTerminal(`[LOGIN] Attempting login for user: ${email}...`, 'warning');
+
+            setTimeout(() => {
+                resCard.classList.remove('hidden');
+                
+                // CASE 1: SECURE WIFI OR 2FA ENABLED -> BLOCKED
+                if (is2FAEnabled) {
+                    const otpCode = Math.floor(100000 + Math.random() * 900000);
+                    document.getElementById('notif-otp-code').innerText = otpCode;
+                    
+                    // Show Push Notification on iPhone Screen
+                    notifBox.classList.remove('hidden');
+
+                    resCard.className = 'bg-emerald-950/80 border border-emerald-500 text-emerald-200 p-2.5 rounded-xl text-[10px] leading-relaxed text-right space-y-1 block';
+                    resCard.innerHTML = `
+                        <p class="font-bold text-emerald-400 flex items-center gap-1">
+                            <i class="fa-solid fa-shield-check"></i> تم التصدّي للمخترق بنجاح!
+                        </p>
+                        <p>توقفت محاولة المخترق فوراً عند شاشة طلب الرمز (OTP). وصلك إشعار بالرمز أعلاه ويمتنع دخوله نهائياً!</p>
+                    `;
+
+                    logHackerTerminal(`[BLOCKED BY 2FA] Prompted for OTP Code (${otpCode}). Attacker ACCESS DENIED permanently!`, 'success');
+
+                    setTimeout(() => {
+                        notifBox.classList.add('hidden');
+                    }, 6500);
+                } 
+                else if (currentWifiMode === 'secure') {
+                    notifBox.classList.add('hidden');
+                    resCard.className = 'bg-emerald-950/80 border border-emerald-500 text-emerald-200 p-2.5 rounded-xl text-[10px] leading-relaxed text-right space-y-1 block';
+                    resCard.innerHTML = `
+                        <p class="font-bold text-emerald-400 flex items-center gap-1">
+                            <i class="fa-solid fa-lock"></i> البيانات مشفرة (WPA3)!
+                        </p>
+                        <p>لأنك متصل بشبكة آمنة ومشفرة، عجز المخترق عن التقاط كلمة السر وتم حجبها بنجاح.</p>
+                    `;
+
+                    logHackerTerminal('[FAILED] Data encrypted by WPA3 cipher. Cannot read password.', 'success');
+                }
+                else {
+                    // CASE 2: UNSECURE WIFI & NO 2FA -> BREACHED
+                    notifBox.classList.add('hidden');
+                    resCard.className = 'bg-red-950/80 border border-red-500 text-red-200 p-2.5 rounded-xl text-[10px] leading-relaxed text-right space-y-1 block';
+                    resCard.innerHTML = `
+                        <p class="font-bold text-red-400 flex items-center gap-1">
+                            <i class="fa-solid fa-triangle-exclamation"></i> شاشة الاختراق: تم سحب الحساب!
+                        </p>
+                        <p>استغل المخترق تسرب البيانات عبر الشبكة المفتوحة وقام بالدخول الفوري للحساب لعدم تفعيل المصادقة الثنائية 2FA!</p>
+                    `;
+
+                    logHackerTerminal('[HACKED] ACCOUNT TAKEOVER SUCCESSFUL! Password cracked and session hijacked!', 'danger');
+                }
+
+            }, 600);
+        }
+
+        function logHackerTerminal(message, type = 'normal') {
+            const consoleBox = document.getElementById('hacker-console');
+            const p = document.createElement('p');
+            
+            if (type === 'danger') p.className = 'text-red-400 font-bold';
+            else if (type === 'warning') p.className = 'text-amber-400';
+            else if (type === 'success') p.className = 'text-emerald-400 font-bold';
+            else p.className = 'text-green-400';
+
+            p.innerText = message;
+            consoleBox.appendChild(p);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        // STAGE 3: IMPROVED QUIZ WITH LOCKED OPTIONS & VISUAL FEEDBACK
+        function answerQuiz(qNum, isCorrect, clickedBtnId) {
+            // Check if already answered to prevent re-triggering
+            if (quizAnswers[qNum] !== null) return;
+
+            quizAnswers[qNum] = isCorrect;
+
+            const selectedBtn = document.getElementById(clickedBtnId);
+            const correctBtnId = correctQuizKeys[qNum];
+            const correctBtn = document.getElementById(correctBtnId);
+            const opts = document.querySelectorAll(`.q-opt-${qNum}`);
+
+            // Lock all options for this question immediately
+            opts.forEach(b => {
+                b.disabled = true;
+                b.classList.add('pointer-events-none', 'opacity-80');
+            });
+
+            if (isCorrect) {
+                // Highlight correctly clicked option in GREEN
+                selectedBtn.classList.remove('bg-black/40', 'border-white/10');
+                selectedBtn.classList.add('bg-emerald-900/80', 'border-emerald-500', 'text-emerald-200', 'font-bold');
+                selectedBtn.querySelector('.status-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>';
+            } else {
+                // Highlight wrongly clicked option in RED
+                selectedBtn.classList.remove('bg-black/40', 'border-white/10');
+                selectedBtn.classList.add('bg-red-900/80', 'border-red-500', 'text-red-200', 'font-bold');
+                selectedBtn.querySelector('.status-icon').innerHTML = '<i class="fa-solid fa-circle-xmark text-red-400 text-sm"></i>';
+
+                // Highlight the correct answer in GREEN to educate the user
+                correctBtn.classList.remove('bg-black/40', 'border-white/10');
+                correctBtn.classList.add('bg-emerald-950/80', 'border-emerald-500', 'text-emerald-300', 'font-bold');
+                correctBtn.querySelector('.status-icon').innerHTML = '<i class="fa-solid fa-check text-emerald-400 text-xs"></i> (الإجابة الصحيحة)';
+            }
+
+            // Check if all 3 questions answered
+            if (quizAnswers[1] !== null && quizAnswers[2] !== null && quizAnswers[3] !== null) {
+                let score = 0;
+                if (quizAnswers[1]) score++;
+                if (quizAnswers[2]) score++;
+                if (quizAnswers[3]) score++;
+
+                const resBox = document.getElementById('quiz-result-box');
+                const scoreTxt = document.getElementById('quiz-score-text');
+                resBox.classList.remove('hidden');
+                scoreTxt.innerText = `النتيجة النهائية للاختبار: ${score} من 3 ${score === 3 ? '🎉 (ممتاز! وعيك السيبراني مرتفع جدًا)' : '👍 (أحسنت بمشاركة التجربة)'}`;
+            }
+        }
+
+        function resetSimulator() {
+            currentWifiMode = 'none';
+            is2FAEnabled = false;
+            isPrivacyProtected = false;
+            quizAnswers = { 1: null, 2: null, 3: null };
+
+            // Reset Wi-Fi Buttons
+            document.getElementById('wifi-unsecure-btn').innerText = 'اتصال';
+            document.getElementById('wifi-unsecure-btn').className = 'text-[9px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded font-bold';
+            
+            document.getElementById('wifi-secure-btn').innerText = 'اتصال';
+            document.getElementById('wifi-secure-btn').className = 'text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-bold';
+
+            document.getElementById('wifi-icon-bar').className = 'fa-solid fa-wifi text-gray-500 text-[10px]';
+
+            // Reset Toggles
+            document.getElementById('toggle-2fa').checked = false;
+            toggle2FASetting();
+
+            document.getElementById('toggle-privacy').checked = false;
+            togglePrivacySetting();
+
+            document.getElementById('input-email').value = '';
+            document.getElementById('input-pass').value = '';
+            document.getElementById('login-result-card').classList.add('hidden');
+            document.getElementById('ios-2fa-notification').classList.add('hidden');
+
+            document.getElementById('label-wifi-state').innerText = 'غير متصل ❌';
+            document.getElementById('label-wifi-state').className = 'text-amber-400 font-bold text-[10px]';
+
+            document.getElementById('hacker-console').innerHTML = `
+                <p class="text-gray-500">// Sniffer initialized. Waiting for user actions...</p>
+            `;
+
+            // Reset Quiz UI & Unlock All Options for next visitor
+            for (let q = 1; q <= 3; q++) {
+                const opts = document.querySelectorAll(`.q-opt-${q}`);
+                opts.forEach(b => {
+                    b.disabled = false;
+                    b.className = `q-opt-${q} bg-black/40 border border-white/10 hover:border-cyber-accent p-2.5 rounded-xl text-right transition text-gray-200 flex items-center justify-between`;
+                    b.querySelector('.status-icon').innerHTML = '';
+                });
+            }
+
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            updateStolenVault();
+            openHome();
+        }
+    </script>
+</body>
+</html>
